@@ -1,0 +1,29 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 2rem;
+  overflow: hidden;
+}
+.absolute{
+  position: sticky;
+
+}
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  display: none; /* Sakriva scrollbar za WebKit bazirane browsere (Chrome, Safari) */
+}
+
+.table {
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse; /* Ovo je opcionalno, ali preporučuje se za tabele */
+}
+.static-btn{
+  position: absolute;
+  bottom: 50px;
+}
