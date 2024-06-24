@@ -2,7 +2,8 @@ import StudentData from "./StudentData";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { Flip, ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export default function StudentTable() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
@@ -41,7 +42,6 @@ export default function StudentTable() {
       if (url.includes("?")) url += `&Active=${searchData.Active}`;
       else url += `?Active=${searchData.Active}`;
     }
-    console.log(url);
 
     try {
       const response = await axios.get(url);
@@ -62,6 +62,7 @@ export default function StudentTable() {
     });
   };
   const handleDelete = (id) => {
+    toast.error("Student deleted successfully!")
     setStudents((prevStudents) =>
       prevStudents.filter((student) => student.id !== id)
     );
@@ -149,6 +150,7 @@ export default function StudentTable() {
           </tbody>
         </table>
       </div>
+      <ToastContainer autoClose={1000} hideProgressBar={true} transition={Flip} />
     </div>
   );
 }

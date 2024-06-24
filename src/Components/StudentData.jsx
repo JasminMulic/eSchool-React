@@ -14,19 +14,17 @@ export default function StudentData({ data, onDelete }) {
         `https://localhost:44390/api/Students/Delete/${id}`
       );
       if (response.status == 200) {
-        alert("Student deleted successfully.");
         onDelete(id); // Ažuriraj roditeljsko stanje
-        setShowPrompt(!prompt);
       } else {
-        alert("Problem");
+        toast.error("Error deleting student.")
       }
     } catch (error) {
-      console.error("Error deleting student:", error);
+      toast.error("Error deleting student")
     }
   };
 
   const navigateToUpdate = (id) => {
-    navigate(`/Students/UpdateStudent/${id}`);
+    navigate({pathname : `/Students/UpdateStudent/${id}`});
   };
   const showPrompt = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {

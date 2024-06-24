@@ -1,8 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import StudentTable from "../../Components/StudentTable";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react";
 export default function Students() {
-  const navigate = useNavigate();
-
+  const navigate = useNavigate(); 
+  const location = useLocation()
+useEffect(() =>{
+if(location.state?.message){
+  toast.success(location.state.message, {autoClose : 1000})
+  setTimeout(() => {
+      navigate('/Students')
+      console.log(location)
+  }, 2000);
+}
+},[])
+  
+  console.log(location)
   return (
     <div className="bg-dark text-light ">
       <button
@@ -27,7 +41,7 @@ export default function Students() {
       <div className="d-flex justify-content-end my-2"></div>
       <StudentTable />
       <button onClick={() => navigate('/Students/AddStudent')} className='btn btn-success mt-2'>Add Student</button>
-
     </div>
+
   );
 }

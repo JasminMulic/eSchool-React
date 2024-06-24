@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDebounce } from "use-debounce";
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddStudent() {
   const [indexNum, setIndexNum] = useState("");
@@ -47,8 +49,7 @@ export default function AddStudent() {
         data
       );
       if (response.status === 200) {
-        console.log(response.data);
-        navigate({ pathname: "/Students" });
+        navigate({ pathname: "/Students" }, {state :{message: "Student added successfully."}});
       }
     } catch (error) {
       console.log("Error submitting form:", error);

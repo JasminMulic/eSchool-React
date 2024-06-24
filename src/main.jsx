@@ -2,16 +2,20 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+
 import Students from './Pages//StudentPages/Students.jsx'
 import AddStudent from './Pages//StudentPages/AddStudent.jsx'
-import UpdateStudent from './Pages//StudentPages/Students.jsx'
+import UpdateStudent from './Pages//StudentPages/UpdateStudent.jsx'
+
 import Subjects from './Pages/SubjectPages/Subjects.jsx'
-import UpdateSUbject from './Pages/SubjectPages/UpdateSubject.jsx'
 import AddSubject from './Pages/SubjectPages/AddSubject.jsx'
+import UpdateSUbject from './Pages/SubjectPages/UpdateSubject.jsx'
+
 import Grades from './Pages/GradePages/Grades.jsx'
 import AddGrade from './Pages/GradePages/AddGrade.jsx'
-import ErrorPage from './Pages/ErrorPage.jsx'
 import UpdateGrade from './Pages/GradePages/UpdateGrade.jsx'
+
+import ErrorPage from './Pages/ErrorPage.jsx'
 const router = createBrowserRouter([
     {
         path : '/',
@@ -19,7 +23,7 @@ const router = createBrowserRouter([
     },
     { path : 'Students', element: <Students />, errorElement : <ErrorPage /> },
     { path : "Students/AddStudent", element : <AddStudent />, errorElement : <ErrorPage /> },
-    { path : "/Students/UpdateStudent/:id", element : <UpdateStudent />, errorElement : <ErrorPage />},
+    { path : "Students/UpdateStudent/:id", element : <UpdateStudent />, errorElement : <ErrorPage />},
     {path : "/Subjects", element : <Subjects />, errorElement : <ErrorPage />},
     {path : "/Subjects/UpdateSubject/:id", element : <UpdateSUbject />, errorElement : <ErrorPage />},
     {path : "/Subjects/AddSubject", element : <AddSubject />, errorElement : <ErrorPage />},

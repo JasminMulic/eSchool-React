@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { useDebounce } from "use-debounce";
+
 import axios from "axios";
 export default function UpdateStudent() {
   const [student, setStudent] = useState({
@@ -14,21 +18,50 @@ export default function UpdateStudent() {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [indexNum, setIndexNum] = useState("");
+  const [debouncedIndexNum] = useDebounce(indexNum, 1000);
+
   const params = useParams();
   const form = useForm();
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, clearErrors, setError } = form;
   const { errors } = formState;
 
+  useEffect(() => {
+    if (debouncedIndexNum) {
+      const checkIndex = async () => {
+        try {
+          const response = await axios.get(
+            `https://localhost:44390/api/Students/IndexExists/${debouncedIndexNum}`
+          );
+          
+          if (response.status === 200 && response.data == "exists") {
+            setError("indexNumber", {
+              type: "manual",
+              message: "Index number exists."
+            });
+          } else if (response.status === 200 && response.data == "available") {
+            clearErrors("indexNumber");
+          }
+        } catch (err) {
+          console.error("Error checking index number:", err);
+        }
+      };
+      checkIndex();
+    } else {
+      clearErrors("indexNumber");
+    }
+    console.log(errors)
+  }, [debouncedIndexNum]);
   const onSubmitFunc = async (data) => {
+    console.log(data)
     try {
       const response = await axios.put(
         `https://localhost:44390/api/Students/Update/${params.id}`,
         data
       );
-      if (response.status == 200) navigate("/");
+      if (response.status == 200) navigate( {pathname : "/Students"}, {state : {message : "Student updated successfully."}});
     } catch (error) {
-      alert(error.message);
+      toast.error("There was an error upddating a student.")
     } finally {
       setLoading(false);
     }
@@ -51,17 +84,6 @@ export default function UpdateStudent() {
   }, [params.id]);
   if (loading) {
     return <p className="text-light display-4">Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p className="text-danger">{error}</p>
-        <button className="btn btn-warning" onClick={() => navigate("/")}>
-          Go back to home
-        </button>
-      </div>
-    );
   }
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
@@ -111,6 +133,7 @@ export default function UpdateStudent() {
             {...register("indexNumber", {
               required: "Index number is required.",
             })}
+            onChange={(e) => setIndexNum(e.target.value) }
           />
           {errors.indexNumber && (
             <p className="text-danger text-start">
@@ -164,8 +187,9 @@ export default function UpdateStudent() {
             name="active"
             defaultChecked={student.active}
             className="form-check-input float-start mt-2"
+            {...register("active")}
           />
-          <span className=" float-start ms-2 mt-1" {...register("active")}>
+          <span className=" float-start ms-2 mt-1">
             Active
           </span>
           <input
@@ -176,6 +200,7 @@ export default function UpdateStudent() {
         </div>
         <DevTool control={control}></DevTool>
       </form>
+      
     </div>
   );
 }
