@@ -15,13 +15,13 @@
 }
 
 .table-wrapper::-webkit-scrollbar {
-  display: none; /* Sakriva scrollbar za WebKit bazirane browsere (Chrome, Safari) */
+  display: none
 }
 
 .table {
   max-width: 100%;
   overflow-x: auto;
-  border-collapse: collapse; /* Ovo je opcionalno, ali preporučuje se za tabele */
+  border-collapse: collapse; 
 }
 .static-btn{
   position: absolute;

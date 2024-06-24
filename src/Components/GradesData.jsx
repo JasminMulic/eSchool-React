@@ -1,9 +1,8 @@
 import axios from "axios";
-import {
-  PencilSquare,
-  Trash2Fill
+import {PencilSquare, Trash2Fill
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 export default function GradesData({ data, onDelete }) {
   const navigate = useNavigate();
   const deleteGrade = async (id) => {
@@ -12,7 +11,7 @@ export default function GradesData({ data, onDelete }) {
         `https://localhost:44390/api/Grades/Delete/${id}`
       );
       if (response.status == 200) {
-        alert("Grade deleted successfully.");
+        toast.error("Grade removed successfully.",{autoClose : 1500, hideProgressBar : true})
         onDelete(id); 
       } else {
         alert("Problem");

@@ -1,8 +1,8 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import StudentTable from "../../Components/StudentTable";
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from "react-toastify";
-import { useEffect, useState } from "react";
+import {toast } from "react-toastify";
+import { useEffect } from "react";
 export default function Students() {
   const navigate = useNavigate(); 
   const location = useLocation()
