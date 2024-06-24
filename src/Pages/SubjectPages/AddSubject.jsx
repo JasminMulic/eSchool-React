@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function AddSubject() {
@@ -17,7 +16,7 @@ export default function AddSubject() {
       );
       if (response.status === 200) {
         console.log(response.data);
-        navigate({ pathname: "/Subjects" });
+        navigate("/Subjects", {state : {message : "Subject added successfully."}})
       }
       alert(response.status);
     } catch (error) {

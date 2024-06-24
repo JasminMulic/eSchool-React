@@ -1,7 +1,14 @@
-import {NavLink, useNavigate } from "react-router-dom";
+import {NavLink, useLocation, useNavigate } from "react-router-dom";
 import SubjectTable from '../../Components/SubjectTable'
+import {toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export default function Students() {
+  const location = useLocation()
   const navigate = useNavigate();
+  console.log(location)
+  if(location.state.message){
+    toast({message : "ksdmnoikdjn"})
+  }
 
   return (
     <div className="bg-dark text-light ">

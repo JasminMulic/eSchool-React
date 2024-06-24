@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDebounce } from "use-debounce";
-import {toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
 export default function AddStudent() {
   const [indexNum, setIndexNum] = useState("");
   const [debouncedIndexNum] = useDebounce(indexNum, 1000);
