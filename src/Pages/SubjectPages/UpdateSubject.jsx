@@ -23,7 +23,7 @@ export default function UpdateSUbject() {
         `https://localhost:44390/api/Subjects/Update/${params.id}`,
         data
       );
-      if (response.status == 200) navigate("/Subjects");
+      if (response.status == 200) navigate("/Subjects", {state : {message : `Subject updated successfully.`}});
     } catch (error) {
       alert(error.message);
     } finally {

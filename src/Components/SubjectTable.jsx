@@ -2,6 +2,7 @@ import SubjectData from "./SubjectData";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SubjectTable() {
   const navigate = useNavigate();
@@ -66,7 +67,9 @@ export default function SubjectTable() {
   const handleDelete = (id) => {
     setSubjects((prevSubjects) =>
       prevSubjects.filter((student) => student.id !== id)
+    
     );
+    toast.error("Student deleted successfully.", {autoClose : 2000, hideProgressBar : true})
   };
 
   return (

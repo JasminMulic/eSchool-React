@@ -1,18 +1,19 @@
 import StudentData from "./StudentData";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Flip, ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from "./LoadingSpinner";
 export default function StudentTable() {
-  const navigate = useNavigate();
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false)
   const [searchData, setSearchData] = useState({
     FirstName: "",
     IndexNumber: "",
     Active: null,
   });
   useEffect(() => {
+    setLoading(true)
     const loadStudents = async () => {
       try {
         const response = await axios.get(
@@ -22,7 +23,10 @@ export default function StudentTable() {
           setStudents(response.data);
         }
       } catch (error) {
-        console.error("Error loading students:", error);
+        toast("There was an error fetching students.",{hideProgressBar : true, autoClose : 2000})
+      }
+      finally{
+        setLoading(false)
       }
     };
     loadStudents();
@@ -30,6 +34,7 @@ export default function StudentTable() {
   const fetchFilterStudents = async (
     url = "https://localhost:44390/api/Students/Search"
   ) => {
+    setLoading(true)
     if (searchData.FirstName) {
       if (url.includes("?")) url += `&Firstname=${searchData.FirstName}`;
       else url += `?Firstname=${searchData.FirstName}`;
@@ -47,7 +52,10 @@ export default function StudentTable() {
       const response = await axios.get(url);
       if (response.status == 200) setStudents(response.data);
     } catch (error) {
-      alert(error.message);
+      toast.error("There was an error filtering students.",{autoClose : 2000, hideProgressBar : true})
+    }
+    finally{
+      setLoading(false)
     }
   };
   const handleInputChange = (event) => {
@@ -70,6 +78,7 @@ export default function StudentTable() {
 
   return (
     <div className="container-fluid">
+      {loading && <LoadingSpinner />}
       <div className="d-md-flex justify-content-between align-items-center py-1">
       <div className="mb-2 mb-md-0 col-md-3">
           <input
@@ -150,7 +159,8 @@ export default function StudentTable() {
           </tbody>
         </table>
       </div>
-      <ToastContainer autoClose={1000} hideProgressBar={true} transition={Flip} />
+      <ToastContainer transition={Flip} />
+
     </div>
   );
 }

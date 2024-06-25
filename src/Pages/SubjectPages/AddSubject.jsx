@@ -2,23 +2,20 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 export default function AddSubject() {
   const navigate = useNavigate();
   const form = useForm();
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const response = await axios.post(
-        "https://localhost:44390/api/Subjects/Add",
-        data
+        "https://localhost:44390/api/Subjects/Add", data
       );
-      if (response.status === 200) {
-        console.log(response.data);
-        navigate("/Subjects", {state : {message : "Subject added successfully."}})
-      }
-      alert(response.status);
+      if (response.status === 200) 
+        navigate({pathname : "/Subjects"}, {state : {message : "Subject added successfully."}})
+      
     } catch (error) {
       console.log(error.message);
     }

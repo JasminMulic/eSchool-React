@@ -4,12 +4,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDebounce } from "use-debounce";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from "../../Components/LoadingSpinner";
+
 export default function AddStudent() {
+  const [loading, setLoading] = useState()
   const [indexNum, setIndexNum] = useState("");
   const [debouncedIndexNum] = useDebounce(indexNum, 1000);
   const navigate = useNavigate();
   const form = useForm();
-  const { register, control, handleSubmit, formState, setError, clearErrors } = form;
+  const { register, handleSubmit, formState, setError, clearErrors } = form;
   const { errors } = formState;
 
   useEffect(() => {
@@ -29,18 +34,19 @@ export default function AddStudent() {
             clearErrors("indexNumber");
           }
         } catch (err) {
-          console.error("Error checking index number:", err);
+          toast.error("There was an error communicating with database.")
         }
       };
       checkIndex();
+
     } else {
       clearErrors("indexNumber");
     }
   }, [debouncedIndexNum, setError, clearErrors]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    try {
+    setLoading(true)
+      try {
       const response = await axios.post(
         "https://localhost:44390/api/Students/Add",
         data
@@ -51,10 +57,16 @@ export default function AddStudent() {
     } catch (error) {
       console.log("Error submitting form:", error);
     }
+    
+    setLoading(false)
   };
-
+  console.log(loading)
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
+
+             {loading && <LoadingSpinner /> }
+
+      <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
@@ -162,7 +174,6 @@ export default function AddStudent() {
             value={"Submit"}
           />
         </div>
-        <DevTool control={control}></DevTool>
       </form>
     </div>
   );

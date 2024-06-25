@@ -6,7 +6,10 @@ import {toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useDebounce } from "use-debounce";
 
+
 import axios from "axios";
+import LoadingSpinner from "../../Components/LoadingSpinner";
+import { FileEasel } from "react-bootstrap-icons";
 export default function UpdateStudent() {
   const [student, setStudent] = useState({
     firstname: "",
@@ -17,9 +20,9 @@ export default function UpdateStudent() {
     active: true,
   });
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(FileEasel);
   const [indexNum, setIndexNum] = useState("");
-  const [debouncedIndexNum] = useDebounce(indexNum, 1000);
+  const [debouncedIndexNum] = useDebounce(indexNum, 300);
 
   const params = useParams();
   const form = useForm();
@@ -47,8 +50,6 @@ export default function UpdateStudent() {
         }
       };
       checkIndex();
-    } else {
-      clearErrors("indexNumber");
     }
     console.log(errors)
   }, [debouncedIndexNum]);
@@ -83,7 +84,7 @@ export default function UpdateStudent() {
     fetchStudent();
   }, [params.id]);
   if (loading) {
-    return <p className="text-light display-4">Loading...</p>;
+    return <LoadingSpinner/>;
   }
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
