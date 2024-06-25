@@ -9,14 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from "../../Components/LoadingSpinner";
 
 export default function AddStudent() {
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(false)
   const [indexNum, setIndexNum] = useState("");
   const [debouncedIndexNum] = useDebounce(indexNum, 1000);
   const navigate = useNavigate();
   const form = useForm();
   const { register, handleSubmit, formState, setError, clearErrors } = form;
   const { errors } = formState;
-
   useEffect(() => {
     if (debouncedIndexNum) {
       const checkIndex = async () => {
@@ -55,16 +54,15 @@ export default function AddStudent() {
         navigate({ pathname: "/Students" }, {state :{message: "Student added successfully."}});
       }
     } catch (error) {
-      console.log("Error submitting form:", error);
+      toast.error("Error adding the student.", {hideProgressBar : true, autoClose : 2000})
     }
-    
-    setLoading(false)
+    finally{
+      setLoading(false)
+    }    
   };
-  console.log(loading)
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
-
-             {loading && <LoadingSpinner /> }
+     {loading && <LoadingSpinner /> }
 
       <ToastContainer />
       <form

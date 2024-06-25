@@ -70,7 +70,6 @@ export default function StudentTable() {
     });
   };
   const handleDelete = (id) => {
-    toast.error("Student deleted successfully!")
     setStudents((prevStudents) =>
       prevStudents.filter((student) => student.id !== id)
     );
@@ -126,7 +125,7 @@ export default function StudentTable() {
 
       <div
         className="table-wrapper"
-        style={{ maxHeight: "500px", overflowY: "auto", position: "static" }}
+        style={{ height: "500px", overflowY: "auto", position: "static" }}
       >
         <table
           className="table table-light "

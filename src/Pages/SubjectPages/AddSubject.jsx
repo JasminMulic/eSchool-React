@@ -2,12 +2,40 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 import { toast } from "react-toastify";
+
 export default function AddSubject() {
   const navigate = useNavigate();
   const form = useForm();
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, setError, clearErrors } = form;
   const { errors } = formState;
+
+  const[code, setCode] = useState()
+  const[codeDebounce] = useDebounce(code, 500)
+
+  useEffect(() =>{
+    if(codeDebounce){
+      const checkCode = async () =>{
+      try{
+        const response = await axios.get(`https://localhost:44390/api/Subjects/CodeExists/${codeDebounce}`)
+        if(response.status == 200 && response.data === "exists"){
+          setError("code", {
+            type: "manual",
+            message: "Subject code exists."
+          });        }
+          else if (response.status == 200 && response.data === "available")
+            clearErrors("code")
+      }
+      catch(exception){
+        toast.error(exception.data.message,{autoClose : 2000, hideProgressBar : true})
+      }
+    }
+    checkCode()
+    clearErrors('code')
+  }
+  },[codeDebounce])
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
@@ -52,7 +80,10 @@ export default function AddSubject() {
             className="form-control col-5"
             {...register("code", {
               required: "Subject code is required.",
-            })}
+            }
+          )
+        }
+        onChange={(e) => setCode(e.target.value)}
           />
           {errors.code && (
             <p className="text-danger text-start">

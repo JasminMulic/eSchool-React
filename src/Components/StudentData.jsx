@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import {
   CheckCircleFill,
   PencilSquare,
@@ -6,6 +7,8 @@ import {
   XCircleFill,
 } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export default function StudentData({ data, onDelete }) {
   const navigate = useNavigate();
   const deleteStudent = async (id) => {
@@ -14,15 +17,15 @@ export default function StudentData({ data, onDelete }) {
         `https://localhost:44390/api/Students/Delete/${id}`
       );
       if (response.status == 200) {
-        onDelete(id); // Ažuriraj roditeljsko stanje
+        onDelete(id);
+        toast.error("Student deleted successfully.",{hideProgressBar : true, autoClose : 2000})
+
       } else {
-        toast.error("Error deleting student.")
       }
     } catch (error) {
       toast.error("Error deleting student")
     }
   };
-
   const navigateToUpdate = (id) => {
     navigate({pathname : `/Students/UpdateStudent/${id}`});
   };
