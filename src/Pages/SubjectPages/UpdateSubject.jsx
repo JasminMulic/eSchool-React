@@ -3,7 +3,12 @@ import { DevTool } from "@hookform/devtools";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useDebounce } from "use-debounce";
+import LoadingSpinner from "../../Components/LoadingSpinner"
+import { toast } from "react-toastify";
 export default function UpdateSUbject() {
+  const[code, setCode] = useState()
+  const[codeDebounce] = useDebounce(code, 500)
   const [subject, setSubject] = useState({
     name: "",
     code: "",
@@ -11,12 +16,31 @@ export default function UpdateSUbject() {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const params = useParams();
   const form = useForm();
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, setError, clearErrors } = form;
   const { errors } = formState;
-
+  useEffect(() =>{
+    if(codeDebounce){
+      const checkCode = async () =>{
+      try{
+        const response = await axios.get(`https://localhost:44390/api/Subjects/CodeExists/${codeDebounce}`)
+        if(response.status == 200 && response.data === "exists"){
+          setError("code", {
+            type: "manual",
+            message: "Subject code already exists."
+          });        }
+          else if (response.status == 200 && response.data === "available")
+            clearErrors("code")
+      }
+      catch(exception){
+        toast.error(exception.data.message,{autoClose : 2000, hideProgressBar : true})
+      }
+    }
+    checkCode()
+    clearErrors('code')
+  }
+  },[codeDebounce])
   const onSubmitFunc = async (data) => {
     try {
       const response = await axios.put(
@@ -47,18 +71,7 @@ export default function UpdateSUbject() {
     fetchSubject();
   }, [params.id]);
   if (loading) {
-    return <p className="text-light display-4">Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <div>
-        <p className="text-danger">{error}</p>
-        <button className="btn btn-warning" onClick={() => navigate("/")}>
-          Go back to home
-        </button>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
@@ -92,7 +105,7 @@ export default function UpdateSUbject() {
             defaultValue={subject.code}
             className="form-control col-5"
             {...register("code", { required: "Code is required." })}
-          />
+         onChange={(e) => setCode(e.target.value)} />
           {errors.code && (
             <p className="text-danger text-start">{errors.code.message}</p>
           )}
@@ -113,7 +126,6 @@ export default function UpdateSUbject() {
             value={"Submit"}
           />
         </div>
-        <DevTool control={control}></DevTool>
       </form>
     </div>
   );

@@ -3,6 +3,8 @@ import { DevTool } from "@hookform/devtools";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 export default function AddGrade() {
     const [students, setStudents] = useState([])
     const [subjects, setSubjects] = useState([])
@@ -17,14 +19,10 @@ export default function AddGrade() {
                     setStudents(requestStudents.data)
                     setSubjects(requestSubjects.data)
                 }
-                else{
-                    alert("There was an error in communication with server.")
-                }
             }
             catch(error){
-                alert(error.message)
+              toast.error("There was an error communicating with server.", {hideProgressBar : true, autoClose : 3000})
             }
-
         }
         loadData()
         return () =>{
@@ -43,15 +41,16 @@ export default function AddGrade() {
         data
       );
       if (response.status === 200) {
-        navigate({ pathname: "/Grades" });
+        navigate({ pathname: "/Grades" }, {state : {message : `Grade added successfully.`}});
       }
     } catch (error) {
-      alert(error.message);
+      toast.error(error.response.data, {})
     } 
   };
 
   return (
     <div className="text-light d-flex justify-content-center w-100 container">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate

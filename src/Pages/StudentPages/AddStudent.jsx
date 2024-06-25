@@ -51,7 +51,7 @@ export default function AddStudent() {
         data
       );
       if (response.status === 200) {
-        navigate({ pathname: "/Students" }, {state :{message: "Student added successfully."}});
+        navigate({ pathname: "/Students" }, {state :{message: `Student ${data.firstname} ${data.lastname} added successfully.`}});
       }
     } catch (error) {
       toast.error("Error adding the student.", {hideProgressBar : true, autoClose : 2000})
@@ -64,7 +64,7 @@ export default function AddStudent() {
     <div className="text-light d-flex justify-content-center w-100 container">
      {loading && <LoadingSpinner /> }
 
-      <ToastContainer />
+      <ToastContainer autoClose = {2000} newestOnTop = {true} />
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate

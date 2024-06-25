@@ -57,13 +57,9 @@ export default function UpdateGrade() {
   const { errors } = formState;
   const onSubmit = async (data) => {
     try{
-      console.log("________________________")
-      console.log(data)
-      console.log("________________________")
-
       const response = await axios.put(`https://localhost:44390/api/Grades/Update/${params.id}`,data)
       if(response.status == 200)
-        navigate("/Grades")
+        navigate("/Grades", {state : {message : "Grade updated successfully."}})
     }
       catch(exception){
         console.log(exception)

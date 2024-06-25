@@ -7,13 +7,14 @@ import { useDebounce } from "use-debounce";
 import { toast } from "react-toastify";
 
 export default function AddSubject() {
+  const[code, setCode] = useState()
+  const[codeDebounce] = useDebounce(code, 500)
+
   const navigate = useNavigate();
   const form = useForm();
   const { register, control, handleSubmit, formState, setError, clearErrors } = form;
   const { errors } = formState;
 
-  const[code, setCode] = useState()
-  const[codeDebounce] = useDebounce(code, 500)
 
   useEffect(() =>{
     if(codeDebounce){
@@ -23,7 +24,7 @@ export default function AddSubject() {
         if(response.status == 200 && response.data === "exists"){
           setError("code", {
             type: "manual",
-            message: "Subject code exists."
+            message: "Subject code already exists."
           });        }
           else if (response.status == 200 && response.data === "available")
             clearErrors("code")
@@ -42,7 +43,7 @@ export default function AddSubject() {
         "https://localhost:44390/api/Subjects/Add", data
       );
       if (response.status === 200) 
-        navigate({pathname : "/Subjects"}, {state : {message : "Subject added successfully."}})
+        navigate({pathname : "/Subjects"}, {state : {message : `Subject ${data.name} added successully.`}})
       
     } catch (error) {
       console.log(error.message);

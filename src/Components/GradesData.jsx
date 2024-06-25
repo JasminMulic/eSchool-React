@@ -11,7 +11,7 @@ export default function GradesData({ data, onDelete }) {
         `https://localhost:44390/api/Grades/Delete/${id}`
       );
       if (response.status == 200) {
-        toast.error("Grade removed successfully.",{autoClose : 1500, hideProgressBar : true})
+        toast.error("Grade deleted successfully.",{autoClose : 1500, hideProgressBar : true})
         onDelete(id); 
       } else {
         alert("Problem");

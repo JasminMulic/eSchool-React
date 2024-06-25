@@ -1,10 +1,21 @@
-import {useNavigate } from "react-router-dom";
+import {useLocation, useNavigate } from "react-router-dom";
 import GradesTable from "../../Components/GradesTable";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from "react";
 export default function Grades() {
   const navigate = useNavigate();
+  const location = useLocation()
 
+    useEffect(() =>{
+      if(location.state?.message){
+        toast.info(location.state.message, {autoClose : 3000, hideProgressBar : true})
+        navigate(location.pathname, {replace : true, state : {}})
+      }
+    },[])
   return (
     <div className="bg-dark text-light ">
+      <ToastContainer />
       <button
         onClick={() => {
           navigate("/Students");

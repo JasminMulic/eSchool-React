@@ -15,7 +15,7 @@ export default function SubjectData({ data, onDelete }) {
         `https://localhost:44390/api/Subjects/Delete/${id}`
       );
       if (response.status == 200) {
-        toast.error("Subject deleted successfully",{hideProgressBar : true, autoClose : 2000, position : "top-left", transition : Zoom})
+        onDelete(id)
       } 
     } catch (error) {
       toast.error(error.response.data,{hideProgressBar : true, autoClose : 2000})
