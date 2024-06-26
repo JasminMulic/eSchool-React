@@ -3,7 +3,9 @@ import './App.css'
 import { useEffect } from 'react'
 import axios from 'axios'
 import Table from './Components/StudentTable'
+import 'react-toastify/dist/ReactToastify.css'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   const navigate = useNavigate()

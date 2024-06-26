@@ -11,7 +11,7 @@ import LoadingSpinner from "../../Components/LoadingSpinner";
 export default function AddStudent() {
   const [loading, setLoading] = useState(false)
   const [indexNum, setIndexNum] = useState("");
-  const [debouncedIndexNum] = useDebounce(indexNum, 1000);
+  const [debouncedIndexNum] = useDebounce(indexNum, 2000);
   const navigate = useNavigate();
   const form = useForm();
   const { register, handleSubmit, formState, setError, clearErrors } = form;
@@ -41,7 +41,7 @@ export default function AddStudent() {
     } else {
       clearErrors("indexNumber");
     }
-  }, [debouncedIndexNum, setError, clearErrors]);
+  }, [debouncedIndexNum]);
 
   const onSubmit = async (data) => {
     setLoading(true)
@@ -51,6 +51,7 @@ export default function AddStudent() {
         data
       );
       if (response.status === 200) {
+        console.log(data)
         navigate({ pathname: "/Students" }, {state :{message: `Student ${data.firstname} ${data.lastname} added successfully.`}});
       }
     } catch (error) {

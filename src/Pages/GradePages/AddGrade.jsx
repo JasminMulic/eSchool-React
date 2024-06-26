@@ -10,6 +10,7 @@ export default function AddGrade() {
     const [subjects, setSubjects] = useState([])
 
     useEffect(() =>{
+      //Jedan request koji vraća sve Predmete i Studente sa njihovim ID-em i imenom/Zasebna klasa SimpleItem/ 
         const loadData = async () =>{
             try{
 
@@ -25,16 +26,12 @@ export default function AddGrade() {
             }
         }
         loadData()
-        return () =>{
-            console.log("cleanup")
-        }
     },[])
   const navigate = useNavigate();
   const form = useForm();
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const response = await axios.post(
         "https://localhost:44390/api/Grades/Add",
@@ -46,6 +43,7 @@ export default function AddGrade() {
     } catch (error) {
       toast.error(error.response.data, {})
     } 
+
   };
 
   return (
@@ -59,13 +57,14 @@ export default function AddGrade() {
         <div style={{ minHeight: "100px" }}>
             <label htmlFor="studentId" className="text-start mb-1 w-100">Choose a student:</label>
         <select className="form-select" name="studentId" id="studentId" defaultValue={-1} defaultChecked={true} {...register("studentId",{validate : (fieldvalue) =>{
+          console.log(fieldvalue)
           return(fieldvalue != -1 ||"Please select a student.")
         }})
       }>          
             <option value={-1} >Select a student</option>
         {students.map((student) => <option key={student.id} value={student.id}>{student.firstname} {student.lastname}</option>)}
         </select>
-      {errors.studentName && <p className="text-danger text-start">{errors.studentName?.message}</p>}
+      {errors.studentId && <p className="text-danger text-start">{errors.studentId?.message}</p>}
         </div>
 
 

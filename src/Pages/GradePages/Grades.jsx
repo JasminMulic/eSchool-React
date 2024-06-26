@@ -2,7 +2,7 @@ import {useLocation, useNavigate } from "react-router-dom";
 import GradesTable from "../../Components/GradesTable";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 export default function Grades() {
   const navigate = useNavigate();
   const location = useLocation()
