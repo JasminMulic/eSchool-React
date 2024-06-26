@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 export default function Students() {
   const location = useLocation()
   const navigate = useNavigate();
-  console.log(location)
   useEffect(() =>{
     if(location.state?.message){
       toast.success(location.state.message, {autoClose : 1500, hideProgressBar : true}, )

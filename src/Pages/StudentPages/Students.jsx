@@ -9,7 +9,7 @@ export default function Students() {
   const location = useLocation()
 useEffect(() =>{
 if(location.state?.message){
-  toast.success(location.state.message, {autoClose : 1500})
+  toast.success(location.state.message, {autoClose : 2000, hideProgressBar : true})
   navigate(location.pathname, {replace : true, state : {}})
 }
 },[])

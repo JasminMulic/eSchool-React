@@ -2,11 +2,10 @@ import {useLocation, useNavigate } from "react-router-dom";
 import GradesTable from "../../Components/GradesTable";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export default function Grades() {
   const navigate = useNavigate();
   const location = useLocation()
-
     useEffect(() =>{
       if(location.state?.message){
         toast.info(location.state.message, {autoClose : 3000, hideProgressBar : true})

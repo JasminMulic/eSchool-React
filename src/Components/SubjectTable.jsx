@@ -1,11 +1,11 @@
 import SubjectData from "./SubjectData";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function SubjectTable() {
-  const navigate = useNavigate();
+  const  [loading, setLoading] = useState(true)
   const [subjects, setSubjects] = useState([]);
   const [searchData, setSearchData] = useState({
     Name: "",
@@ -14,6 +14,7 @@ export default function SubjectTable() {
   });
   useEffect(() => {
     const loadSubjects = async () => {
+      if(loading)
       try {
         const response = await axios.get(
           "https://localhost:44390/api/Subjects"
@@ -22,7 +23,10 @@ export default function SubjectTable() {
           setSubjects(response.data);
         }
       } catch (error) {
-        alert("Error loading subjects:", error);
+        toast.error("Error communicating with database", {autoClose : 2500, hideProgressBar : true});
+      }
+      finally{
+        setLoading(false)
       }
     };
     loadSubjects();
@@ -30,6 +34,7 @@ export default function SubjectTable() {
   const fetchFilterSubjects = async (
     url = "https://localhost:44390/api/Subjects/Search"
   ) => {
+    setLoading(true)
     if (searchData.Name) {
       if (url.includes("?")) url += `&Name=${searchData.Name}`;
       else url += `?Name=${searchData.Name}`;
@@ -42,7 +47,6 @@ export default function SubjectTable() {
       if (url.includes("?")) url += `&Active=${searchData.Active}`;
       else url += `?Active=${searchData.Active}`;
     }
-
     try {
       const response = await axios.get(url);
       if (response.status == 200){
@@ -52,6 +56,10 @@ export default function SubjectTable() {
     } catch (error) {
       alert(error.message);
     }
+    finally{
+      setLoading(false)
+    }
+  
   };
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -69,11 +77,12 @@ export default function SubjectTable() {
       prevSubjects.filter((student) => student.id !== id)
     
     );
-    toast.error("Student deleted successfully.", {autoClose : 2000, hideProgressBar : true})
+    toast.error("Subject deleted successfully.", {autoClose : 2000, hideProgressBar : true})
   };
 
   return (
     <div className="container-fluid">
+      {loading && <LoadingSpinner className={""} />}
       <div className="d-md-flex justify-content-between align-items-center py-1">
       <div className="mb-2 mb-md-0 col-md-3">
           <input

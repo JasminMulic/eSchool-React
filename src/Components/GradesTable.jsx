@@ -1,10 +1,16 @@
 import GradesData from "../Components/GradesData"
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingSpinner from '../Components/LoadingSpinner'
+
 export default function GradesTable() {
   const [grades, setGrades] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     const loadGrades = async () => {
       try {
         const response = await axios.get(
@@ -14,12 +20,14 @@ export default function GradesTable() {
             setGrades(response.data);
         }
       } catch (error) {
-        alert("Error loading grades:", error);
+        toast.error("Error loading grades:",{});
+      }
+      finally{
+        setLoading(false)
       }
     };
     loadGrades();
 }, []);
-console.log(grades)
   const handleDelete = (id) => {
     setGrades((prevGrades) =>
       prevGrades.filter((grade) => grade.id !== id)
@@ -28,6 +36,7 @@ console.log(grades)
 
   return (
     <div className="container-fluid mt-5 pt-2">
+      {loading && <LoadingSpinner />}
       <div
         className="table-wrapper"
         style={{ maxHeight: "500px", overflowY: "auto", position: "static" }}
